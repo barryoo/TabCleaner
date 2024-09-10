@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tab Disposer</title>
+    <style>
+        body {
+            width: 200px;
+            font-family: Arial, sans-serif;
+        }
+
+        button {
+            width: 100%;
+            margin: 2px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="discardCurrent">Discard Current</button>
+    <button id="discardHalfHour">Discard Idle 30 Min</button>
+    <button id="discardOthers">Discard Other</button>
+    <button id="discardGroup">Discard Group</button>
+
+    <hr/>
+    <button id="ignore-tab">Don't discard this tab in 24 hours</button>
+    
+    <div>
+    <input style="width:50%" type="number" id="idleLimit" placeholder="Idle time (min)" min="1" />
+    <button style="width:30%" id="save">Save</button>
+    </div>
+    <script src="popup.js"></script>
+</body>
+
+</html>

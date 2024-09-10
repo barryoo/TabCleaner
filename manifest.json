@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "TabCleaner",
+  "version": "0.1",
+  "description": "auto discards idle tabs",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["tabs", "storage"],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
