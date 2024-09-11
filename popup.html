@@ -24,13 +24,23 @@
     <button id="discardGroup">Discard Group</button>
 
     <hr/>
-    <button id="ignore-tab">Don't discard this tab in 24 hours</button>
-    
+
+
+    <button id="ignoreTab24Hour">ignore this tab in 24 hours</button>
+    <button id="ignoreTab1Week">ignore this tab in 1 week</button>
+    <input type="text" style="width:100%" id="whitelistUrl" placeholder="Enter URL or pattern" />
+    <button style="width:45%" id="ignoreTab">ignore</button>
+    <button style="width:45%" id="resetIgnoreTab">reset</button>
+    <hr/>
+
+
     <div>
     <input style="width:50%" type="number" id="idleLimit" placeholder="Idle time (min)" min="1" />
     <button style="width:30%" id="save">Save</button>
     </div>
     <script src="popup.js"></script>
+
+
 </body>
 
 </html>

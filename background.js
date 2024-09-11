@@ -41,3 +41,10 @@ setInterval(() => {
     }
   }
 }, 60000); // 每分钟检查一次
+
+function isWhitelisted(url, whitelist) {
+  return whitelist.some((pattern) => {
+    const regex = new RegExp("^" + pattern.replace(/\*/g, ".*") + "$");
+    return regex.test(url);
+  });
+}
