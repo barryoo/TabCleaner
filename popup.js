@@ -76,7 +76,7 @@ function getCurrentTabUrlWithoutParams(callback) {
 }
 
 document.getElementById("ignoreTab").addEventListener("click", () => {
-  const url = document.getElementById("ignoreTab").value.trim();
+  const url = document.getElementById("whitelistUrl").value.trim();
   if (url) {
     chrome.storage.local.get(["whitelist"], (result) => {
       const whitelist = result.whitelist || [];
@@ -113,9 +113,8 @@ function ignoreTab(time) {
       const expirationTime = now + time * 1000;
 
       // 存储该标签页的忽略状态
-      chrome.storage.local.set({ [tabId]: expirationTime }, () => {
-        alert("this tab will not be discard for " + time / 60 + " hours.");
-      });
+      chrome.extension.getBackgroundPage().resetIdleTime(tabId, expirationTime);
+      alert("this tab will not be discard for " + time / 60 + " hours.");
     }
   });
 }
@@ -123,7 +122,7 @@ function ignoreTab(time) {
 //设置最大闲置时间
 document.getElementById("save").addEventListener("click", () => {
   const idleLimit = document.getElementById("idleLimit").value;
-  const idleLimitInMs = idleLimit * 60 * 1000; // 转换为毫秒
+  const idleLimitInMs = idleLimit * 1000; // 转换为毫秒
 
   // 存储用户设置
   chrome.storage.local.set({ idleLimit: idleLimitInMs }, () => {
@@ -135,11 +134,10 @@ document.getElementById("save").addEventListener("click", () => {
 document.addEventListener("DOMContentLoaded", () => {
   chrome.storage.local.get(["idleLimit"], (result) => {
     if (result.idleLimit) {
-      document.getElementById("idleLimit").value =
-        result.idleLimit / (60 * 1000); // 转换为分钟
+      document.getElementById("idleLimit").value = result.idleLimit / 1000; // 转换为秒
     } else {
       //默认的时间
-      document.getElementById("idleLimit").value = 15;
+      document.getElementById("idleLimit").value = 10;
     }
   });
 });
