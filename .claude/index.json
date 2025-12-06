@@ -1,0 +1,113 @@
+{
+  "timestamp": "2025-12-06T10:55:54+08:00",
+  "projectName": "TabCleaner",
+  "projectType": "Chrome Extension",
+  "language": "JavaScript",
+  "framework": "Vanilla JS (Manifest V3)",
+  "totalFiles": 13,
+  "scannedFiles": 8,
+  "coveragePercent": 61.5,
+  "modules": [
+    {
+      "path": "/",
+      "name": "Core Extension",
+      "language": "JavaScript",
+      "entryPoints": [
+        "background.js",
+        "popup.js"
+      ],
+      "interfaces": [
+        "popup.html"
+      ],
+      "config": [
+        "manifest.json"
+      ],
+      "dataModels": [
+        "idleTime (Map<tabId, timestamp>)",
+        "whitelist (Array<string>)",
+        "idleLimit (number)"
+      ],
+      "tests": [],
+      "coverage": {
+        "hasEntry": true,
+        "hasInterface": true,
+        "hasConfig": true,
+        "hasDataModel": true,
+        "hasTests": false
+      }
+    },
+    {
+      "path": "/_locales/en/",
+      "name": "English Localization",
+      "language": "JSON",
+      "entryPoints": [
+        "messages.json"
+      ],
+      "coverage": {
+        "hasEntry": true,
+        "hasInterface": false,
+        "hasConfig": false,
+        "hasDataModel": false,
+        "hasTests": false
+      }
+    },
+    {
+      "path": "/_locales/zh/",
+      "name": "Chinese Localization",
+      "language": "JSON",
+      "entryPoints": [
+        "messages.json"
+      ],
+      "coverage": {
+        "hasEntry": true,
+        "hasInterface": false,
+        "hasConfig": false,
+        "hasDataModel": false,
+        "hasTests": false
+      }
+    },
+    {
+      "path": "/icons/",
+      "name": "Icon Assets",
+      "language": "Binary",
+      "entryPoints": [
+        "icon16.png",
+        "icon32.png",
+        "icon48.png",
+        "icon128.png",
+        "icon.svg"
+      ],
+      "coverage": {
+        "hasEntry": true,
+        "hasInterface": false,
+        "hasConfig": false,
+        "hasDataModel": false,
+        "hasTests": false
+      }
+    }
+  ],
+  "ignoredPatterns": [
+    ".git/**",
+    "node_modules/**",
+    "*.zip"
+  ],
+  "ignoredFiles": 0,
+  "gaps": [
+    {
+      "module": "Core Extension",
+      "missing": "tests",
+      "recommendation": "添加单元测试覆盖核心逻辑（标签页监控、白名单匹配、自动丢弃）"
+    },
+    {
+      "module": "Core Extension",
+      "missing": "documentation",
+      "recommendation": "添加 JSDoc 注释到关键函数"
+    }
+  ],
+  "nextSteps": [
+    "考虑添加测试框架（如 Jest）",
+    "为 background.js 和 popup.js 添加详细的函数级文档",
+    "考虑将 popup.html 中的内联样式提取到独立 CSS 文件"
+  ],
+  "truncated": false
+}

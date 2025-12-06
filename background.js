@@ -94,7 +94,23 @@ setInterval(async () => {
   for (const tabId in idleTime) {
     try {
       index += 1;
-      const tab = await chrome.tabs.get(parseInt(tabId));
+      let tab;
+      try {
+        tab = await new Promise((resolve, reject) => {
+          chrome.tabs.get(parseInt(tabId), (result) => {
+            if (chrome.runtime.lastError) {
+              reject(chrome.runtime.lastError);
+            } else {
+              resolve(result);
+            }
+          });
+        });
+      } catch (error) {
+        console.log("tab not found, skip", tabId, error.message);
+        delete idleTime[tabId]; // 清理不存在的标签页记录
+        continue;
+      }
+
       if (!tab) {
         console.log("tab not found, skip");
         continue;
@@ -137,7 +153,7 @@ setInterval(async () => {
       console.log(e);
     }
   }
-}, 10000); // 每分钟检查一次
+}, 10000); // 每10s检查一次
 
 function isWhitelisted(url, whitelist) {
   return whitelist.some((pattern) => {
