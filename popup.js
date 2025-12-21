@@ -1,9 +1,12 @@
+// 浏览器兼容性处理：Firefox 使用 browser，Chrome 使用 chrome
+const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
+
 // Message display function
 function showMessage(messageId, substitutions = null, isError = false) {
   const messageEl = document.getElementById("message");
   const text = substitutions
-    ? chrome.i18n.getMessage(messageId, substitutions)
-    : chrome.i18n.getMessage(messageId);
+    ? browserAPI.i18n.getMessage(messageId, substitutions)
+    : browserAPI.i18n.getMessage(messageId);
 
   // Add icon based on message type
   const icon = isError
@@ -23,7 +26,7 @@ function initializeI18n() {
   // 普通文本
   document.querySelectorAll("[data-i18n]").forEach((element) => {
     const messageId = element.getAttribute("data-i18n");
-    const message = chrome.i18n.getMessage(messageId);
+    const message = browserAPI.i18n.getMessage(messageId);
     if (message) {
       element.textContent = message;
     }
@@ -32,7 +35,7 @@ function initializeI18n() {
   // 占位符文本
   document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
     const messageId = element.getAttribute("data-i18n-placeholder");
-    const message = chrome.i18n.getMessage(messageId);
+    const message = browserAPI.i18n.getMessage(messageId);
     if (message) {
       element.placeholder = message;
     }
@@ -41,7 +44,7 @@ function initializeI18n() {
   // 标题提示
   document.querySelectorAll("[data-i18n-title]").forEach((element) => {
     const messageId = element.getAttribute("data-i18n-title");
-    const message = chrome.i18n.getMessage(messageId);
+    const message = browserAPI.i18n.getMessage(messageId);
     if (message) {
       element.title = message;
     }
@@ -60,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // 加载闲置时间限制
 function loadIdleLimit() {
-  chrome.storage.local.get(["idleLimit"], (result) => {
+  browserAPI.storage.local.get(["idleLimit"], (result) => {
     const idleLimitInput = document.getElementById("idleLimit");
     if (result.idleLimit) {
       idleLimitInput.value = Math.floor(result.idleLimit / 1000);
@@ -131,7 +134,7 @@ function canDiscardTab(tab) {
 }
 
 async function discardTabs(option) {
-  chrome.tabs.query({ currentWindow: true }, async (tabs) => {
+  browserAPI.tabs.query({ currentWindow: true }, async (tabs) => {
     const now = Date.now();
     const activeTabId = tabs.find((tab) => tab.active)?.id;
     let discardedCount = 0;
@@ -161,7 +164,7 @@ async function discardTabs(option) {
       if (shouldDiscard) {
         if (canDiscardTab(tab)) {
           try {
-            await chrome.tabs.discard(tab.id);
+            await browserAPI.tabs.discard(tab.id);
             discardedCount++;
             console.log("✅ 成功丢弃标签页: " + tab.title);
           } catch (error) {
@@ -208,7 +211,7 @@ document.getElementById("resetProtect").addEventListener("click", () => {
 
 // 获取当前标签页的 URL，并转换为通配符格式
 function getCurrentTabUrlWithoutParams(callback) {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  browserAPI.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     if (tabs[0]) {
       const url = new URL(tabs[0].url);
       // 构建通配符格式：domain/*
@@ -221,11 +224,11 @@ function getCurrentTabUrlWithoutParams(callback) {
 document.getElementById("ignoreTab").addEventListener("click", () => {
   const url = document.getElementById("whitelistUrl").value.trim();
   if (url) {
-    chrome.storage.local.get(["whitelist"], (result) => {
+    browserAPI.storage.local.get(["whitelist"], (result) => {
       const whitelist = result.whitelist || [];
       if (!whitelist.includes(url)) {
         whitelist.push(url);
-        chrome.storage.local.set({ whitelist: whitelist }, () => {
+        browserAPI.storage.local.set({ whitelist: whitelist }, () => {
           showMessage("addedToProtectionList", [url]);
         });
       } else {
@@ -238,11 +241,11 @@ document.getElementById("ignoreTab").addEventListener("click", () => {
 document.getElementById("resetIgnoreTab").addEventListener("click", () => {
   const url = document.getElementById("whitelistUrl").value.trim();
   if (url) {
-    chrome.storage.local.get(["whitelist"], (result) => {
+    browserAPI.storage.local.get(["whitelist"], (result) => {
       const whitelist = result.whitelist || [];
       if (whitelist.includes(url)) {
         whitelist.splice(whitelist.indexOf(url), 1);
-        chrome.storage.local.set({ whitelist: whitelist }, () => {
+        browserAPI.storage.local.set({ whitelist: whitelist }, () => {
           showMessage("removedFromProtectionList", [url]);
         });
       } else {
@@ -253,13 +256,13 @@ document.getElementById("resetIgnoreTab").addEventListener("click", () => {
 });
 
 function ignoreTab(minutes) {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  browserAPI.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     if (tabs.length > 0) {
       const tabId = tabs[0].id;
       const now = Date.now();
       const expirationTime = now + minutes * 60 * 1000;
 
-      chrome.runtime.sendMessage(
+      browserAPI.runtime.sendMessage(
         { type: "resetIdleTime", tabId: tabId, time: expirationTime },
         () => {
           if (minutes > 0) {
@@ -275,7 +278,7 @@ function ignoreTab(minutes) {
 document.getElementById("save").addEventListener("click", () => {
   const idleLimit = document.getElementById("idleLimit").value;
   const idleLimitInMs = idleLimit * 1000;
-  chrome.storage.local.set({ idleLimit: idleLimitInMs }, () => {
+  browserAPI.storage.local.set({ idleLimit: idleLimitInMs }, () => {
     showMessage("idleLimitSaved", [idleLimit]);
   });
 });
@@ -295,7 +298,7 @@ function loadTabStatus() {
     }
   });
 
-  chrome.tabs.query({}, (tabs) => {
+  browserAPI.tabs.query({}, (tabs) => {
     const totalTabs = tabs.length;
     const activeTabs = tabs.filter((tab) => !tab.discarded).length;
     const discardedTabs = tabs.filter((tab) => tab.discarded).length;
