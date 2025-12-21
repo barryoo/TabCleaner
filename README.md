@@ -1,90 +1,138 @@
 # TabCleaner
 
-A Chrome extension that automatically manages your tabs to save memory and improve browser performance.
+一个自动管理浏览器标签页的扩展，帮助节省内存并提升浏览器性能。
 
-## Features
+[English](README.en.md) | 中文
 
-### 🚀 Automatic Tab Management
-- **Auto-discard idle tabs**: Automatically discards tabs that have been inactive for a specified time period (default: 30 minutes)
-- **Smart idle detection**: Fixed bug where tabs were incorrectly discarded - now properly tracks when each tab was last used
-- **Customizable idle time**: Set your preferred idle time limit (in seconds)
+## 功能特性
 
-### ⚡ Quick Actions
-- **Discard current tab**: Instantly free up memory from the active tab
-- **Discard other tabs**: Keep only the current tab active, discard all others
-- **Discard tab group**: Discard all tabs in the current tab group
-- **Discard idle tabs**: Manually trigger discarding of tabs idle for 30+ minutes
+### 🚀 自动标签页管理
+- **自动丢弃空闲标签页**：自动丢弃在指定时间内未使用的标签页（默认：30 分钟）
+- **智能空闲检测**：修复了标签页被错误丢弃的问题 - 现在能正确跟踪每个标签页最后使用时间
+- **可自定义空闲时间**：设置你偏好的空闲时间限制（单位：秒）
 
-### 🛡️ Tab Protection
-- **Temporary protection**: Protect tabs from being discarded for 24 hours or 1 week
-- **Permanent whitelist**: Add URL patterns to permanently protect certain sites
-- **Wildcard support**: Use patterns like `*.example.com/*` to protect entire domains
+### ⚡ 快速操作
+- **丢弃当前标签页**：立即释放当前激活标签页的内存
+- **丢弃其他标签页**：仅保持当前标签页激活，丢弃所有其他标签页
+- **丢弃标签组**：丢弃当前标签组中的所有标签页
+- **丢弃空闲标签页**：手动触发丢弃空闲 30 分钟以上的标签页
 
-### 📊 Tab Status & Tracking
-- **Real-time status display**: Shows current count of active, discarded, and total tabs at the top of popup
-- **Auto-refresh**: Status updates every 5 seconds and immediately after discard operations
-- **Visual indicators**: Clear console output with emoji indicators when tabs are discarded
-- **Discard history**: Track and display recently discarded tabs with timestamps
-- **Detailed information**: Shows tab title, URL, and discard time for each discarded tab
-- **History management**: View recent discard history and clear it when needed
+### 🛡️ 标签页保护
+- **临时保护**：保护标签页 24 小时或 1 周不被丢弃
+- **永久白名单**：添加 URL 模式以永久保护特定网站
+- **通配符支持**：使用如 `*.example.com/*` 的模式保护整个域名
 
-### 🎨 Modern UI Design
-- **Glassmorphism Effects**: Semi-transparent cards with backdrop blur
-- **Gradient Backgrounds**: Beautiful purple gradient theme throughout
-- **Smooth Animations**: Hover effects, loading states, and transition animations
-- **Color-coded Buttons**: Visual distinction for different action types
-- **Responsive Layout**: Optimized spacing and typography for better readability
+### 📊 标签页状态与跟踪
+- **实时状态显示**：在弹窗顶部显示激活、已丢弃和总标签页数量
+- **自动刷新**：状态每 5 秒更新一次，在丢弃操作后立即更新
+- **可视化指示器**：标签页被丢弃时在控制台输出清晰的表情符号指示
+- **丢弃历史**：跟踪并显示最近丢弃的标签页及时间戳
+- **详细信息**：显示每个已丢弃标签页的标题、URL 和丢弃时间
+- **历史管理**：查看最近的丢弃历史并在需要时清除
 
-### 🌍 Multi-language Support
-- English
-- 中文 (Chinese)
+### 🎨 现代化 UI 设计
+- **毛玻璃效果**：带有背景模糊的半透明卡片
+- **渐变背景**：贯穿始终的美丽紫色渐变主题
+- **流畅动画**：悬停效果、加载状态和过渡动画
+- **颜色编码按钮**：不同操作类型的视觉区分
+- **响应式布局**：优化的间距和排版，提升可读性
 
-## Installation
+### 🌍 多语言支持
+- English（英文）
+- 中文
 
-1. Download or clone this repository
-2. Open Chrome and go to `chrome://extensions/`
-3. Enable "Developer mode" in the top right
-4. Click "Load unpacked" and select the extension folder
-5. The TabCleaner icon will appear in your toolbar
+## 安装说明
 
-## Usage
+本项目使用浏览器专用的 manifest 文件：
+- `manifest_chrome.json` 用于 Chrome/Edge
+- `manifest_firefox.json` 用于 Firefox
 
-Click the TabCleaner icon in your toolbar to access:
-- **Tab status overview**: Real-time display of active, discarded, and total tab counts
-- **Quick discard options**: Instantly discard current tab, other tabs, or tab groups
-- **Tab protection settings**: Set temporary or permanent protection for important tabs
-- **Auto-discard configuration**: Customize idle time limits for automatic discarding
-- **Discard history**: View recently discarded tabs and clear history
+### Chrome/Edge 浏览器
 
-### Tab Status Display
+**方式一：使用构建脚本（推荐）**
+1. 下载或克隆本仓库
+2. 运行 `node build.js chrome` 为 Chrome 构建
+3. 打开 Chrome 浏览器，访问 `chrome://extensions/`
+4. 在右上角启用"开发者模式"
+5. 点击"加载已解压的扩展程序"，选择 `dist/chrome` 文件夹
+6. TabCleaner 图标将出现在工具栏中
 
-The popup now shows a status bar at the top with three key metrics:
-- **Active**: Number of currently loaded (non-discarded) tabs
-- **Discarded**: Number of tabs that have been discarded to save memory
-- **Total**: Total number of tabs across all windows
+**方式二：直接安装**
+1. 下载或克隆本仓库
+2. 将 `manifest_chrome.json` 重命名为 `manifest.json`
+3. 打开 Chrome 浏览器，访问 `chrome://extensions/`
+4. 在右上角启用"开发者模式"
+5. 点击"加载已解压的扩展程序"，选择扩展文件夹
+6. TabCleaner 图标将出现在工具栏中
 
-This information updates automatically every 5 seconds and immediately after any discard operation.
+### Firefox 浏览器
 
-## Recent Updates (v0.4) - UI Redesign ✨
+1. 下载或克隆本仓库
+2. 运行 `node build.js firefox` 为 Firefox 构建（将在 `dist/firefox` 文件夹中创建正确的 manifest）
+3. 打开 Firefox 浏览器，访问 `about:debugging#/runtime/this-firefox`
+4. 点击"临时载入附加组件"
+5. 选择 `dist/firefox` 文件夹中的 `manifest.json` 文件
+6. TabCleaner 图标将出现在工具栏中
 
-- **🎨 Complete UI Redesign**: Modern glassmorphism design with gradient backgrounds
-- **✨ Smooth Animations**: Button hover effects, ripple animations, and loading states
-- **🌈 Color-coded Actions**: Different button colors for different action types
-- **📱 Enhanced Layout**: Improved spacing, typography, and responsive design
-- **🎪 Visual Effects**: Backdrop blur, floating animations, and modern card designs
+注意：Firefox 中的临时扩展在浏览器重启后会被移除。要使其永久化，需要通过 [Firefox Add-ons](https://addons.mozilla.org/developers/) 进行签名。
 
-## Previous Updates (v1.0.0)
+### 构建脚本
 
-- **Fixed critical bug**: Tabs are no longer incorrectly discarded when switching between them
-- **Improved idle time tracking**: Now properly records when each tab was last used
-- **Enhanced stability**: Better handling of tab switching and closing events
+你可以使用构建脚本创建特定浏览器的发布版本：
 
-## Permissions
+```bash
+# 仅为 Chrome 构建
+node build.js chrome
 
-- `tabs`: Required to manage and discard tabs
-- `storage`: Required to save your settings and whitelist
-- `activeTab`: Required to identify the currently active tab
+# 仅为 Firefox 构建
+node build.js firefox
 
-## Privacy
+# 为所有浏览器构建
+node build.js all
+# 或者简写
+node build.js
+```
 
-This extension works entirely locally on your device. No data is collected or transmitted to external servers.
+输出结果将在 `dist` 文件夹中，每个浏览器都有单独的子目录。
+
+## 使用方法
+
+点击工具栏中的 TabCleaner 图标以访问：
+- **标签页状态概览**：实时显示激活、已丢弃和总标签页数量
+- **快速丢弃选项**：立即丢弃当前标签页、其他标签页或标签组
+- **标签页保护设置**：为重要标签页设置临时或永久保护
+- **自动丢弃配置**：自定义自动丢弃的空闲时间限制
+- **丢弃历史**：查看最近丢弃的标签页并清除历史记录
+
+### 标签页状态显示
+
+弹窗顶部现在显示一个状态栏，包含三个关键指标：
+- **激活**：当前加载的（未丢弃的）标签页数量
+- **已丢弃**：为节省内存而丢弃的标签页数量
+- **总计**：所有窗口中的标签页总数
+
+此信息每 5 秒自动更新，并在任何丢弃操作后立即更新。
+
+## 最近更新 (v0.4) - UI 重新设计 ✨
+
+- **🎨 完整 UI 重新设计**：采用毛玻璃效果和渐变背景的现代化设计
+- **✨ 流畅动画**：按钮悬停效果、涟漪动画和加载状态
+- **🌈 颜色编码操作**：不同操作类型使用不同按钮颜色
+- **📱 增强布局**：改进的间距、排版和响应式设计
+- **🎪 视觉效果**：背景模糊、浮动动画和现代卡片设计
+
+## 之前的更新 (v1.0.0)
+
+- **修复关键错误**：标签页在切换时不再被错误丢弃
+- **改进空闲时间跟踪**：现在能正确记录每个标签页最后使用的时间
+- **增强稳定性**：更好地处理标签页切换和关闭事件
+
+## 权限说明
+
+- `tabs`：管理和丢弃标签页所需
+- `storage`：保存设置和白名单所需
+- `activeTab`：识别当前激活的标签页所需
+
+## 隐私保护
+
+本扩展完全在你的设备本地运行。不会收集或传输任何数据到外部服务器。

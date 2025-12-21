@@ -1,3 +1,6 @@
+// 浏览器兼容性处理：Firefox 使用 browser，Chrome 使用 chrome
+const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
+
 let idleTime = {};
 let lastActiveTabId = null; // 记录上一个激活的标签页ID
 const IDLE_LIMIT = 1 * 60 * 1000; // default idle time: 1 minutes
@@ -11,7 +14,7 @@ const IDLE_LIMIT = 1 * 60 * 1000; // default idle time: 1 minutes
 // });
 
 //监听标签页的关闭事件
-chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
+browserAPI.tabs.onRemoved.addListener((tabId, removeInfo) => {
   console.log("关闭了一个标签页", tabId);
   delete idleTime[tabId];
 
@@ -22,7 +25,7 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 });
 
 // 监听标签页激活事件
-chrome.tabs.onActivated.addListener((activeInfo) => {
+browserAPI.tabs.onActivated.addListener((activeInfo) => {
   console.log("激活了一个标签页", activeInfo.tabId);
 
   // 如果有上一个激活的标签页，重置其闲置时间为当前时间
@@ -40,12 +43,12 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
 });
 
 // 监听新标签页的创建事件
-chrome.tabs.onCreated.addListener((tab) => {
-  resetIdleTime(tab.tabId);
+browserAPI.tabs.onCreated.addListener((tab) => {
+  resetIdleTime(tab.id);
 });
 
 // 监听来自 popup 的消息
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+browserAPI.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "resetIdleTime") {
     resetIdleTime(message.tabId, message.time);
     sendResponse();
@@ -97,9 +100,9 @@ setInterval(async () => {
       let tab;
       try {
         tab = await new Promise((resolve, reject) => {
-          chrome.tabs.get(parseInt(tabId), (result) => {
-            if (chrome.runtime.lastError) {
-              reject(chrome.runtime.lastError);
+          browserAPI.tabs.get(parseInt(tabId), (result) => {
+            if (browserAPI.runtime.lastError) {
+              reject(browserAPI.runtime.lastError);
             } else {
               resolve(result);
             }
@@ -139,7 +142,7 @@ setInterval(async () => {
       if (now - idleTime[tabId] > idleLimit) {
         console.log("准备discard");
         try {
-          await chrome.tabs.discard(parseInt(tabId));
+          await browserAPI.tabs.discard(parseInt(tabId));
           console.log("✅ 自动丢弃标签页: " + tab.title);
           delete idleTime[tabId]; // 移除已丢弃的标签页的闲置记录
         } catch (error) {
@@ -164,9 +167,9 @@ function isWhitelisted(url, whitelist) {
 
 function getFromLocalStorage(key) {
   return new Promise((resolve, reject) => {
-    chrome.storage.local.get(key, (result) => {
-      if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError);
+    browserAPI.storage.local.get(key, (result) => {
+      if (browserAPI.runtime.lastError) {
+        reject(browserAPI.runtime.lastError);
       } else {
         resolve(result[key]);
       }
@@ -176,7 +179,7 @@ function getFromLocalStorage(key) {
 
 function queryTabs(options) {
   return new Promise((resolve, reject) => {
-    chrome.tabs.query(options, (tabs) => {
+    browserAPI.tabs.query(options, (tabs) => {
       resolve(tabs);
     });
   });
