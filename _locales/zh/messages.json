@@ -41,11 +41,20 @@
   "dontDiscardIn1Week": {
     "message": "保护1周"
   },
+  "protectPermanent": {
+    "message": "永久保护"
+  },
+  "removeProtection": {
+    "message": "移除保护"
+  },
   "resetProtection": {
     "message": "重置保护"
   },
   "permanentProtection": {
-    "message": "永久保护（白名单）"
+    "message": "URL 规则保护"
+  },
+  "chooseUrlScope": {
+    "message": "选择要保护的 URL 范围（并设置保护时长）:"
   },
   "protectionHelp": {
     "message": "使用临时保护或永久白名单规则来防止标签页被自动丢弃。"
@@ -78,7 +87,10 @@
     "message": "闲置时间限制"
   },
   "idleTimeLimitDesc": {
-    "message": "超过此时间的不活动标签页将被自动丢弃"
+    "message": "闲置超过此时间的标签页会被丢弃"
+  },
+  "secondsUnit": {
+    "message": "秒"
   },
   "defaultTime": {
     "message": "默认：1800秒（30分钟）"
@@ -160,5 +172,28 @@
   },
   "totalTabs": {
     "message": "总计"
+  },
+  "protectionExtended": {
+    "message": "保护时间已延长 $hours$ 小时",
+    "placeholders": {
+      "hours": {
+        "content": "$1"
+      }
+    }
+  },
+  "protectionCanceled": {
+    "message": "已取消临时保护"
+  },
+  "pleaseSelectPattern": {
+    "message": "请选择一个URL规则"
+  },
+  "permanentProtectedTip": {
+    "message": "已处于永久保护中"
+  },
+  "temporaryProtectionExpiresAt": {
+    "message": "过期时间:"
+  },
+  "cancelTemporaryProtection": {
+    "message": "取消临时保护"
   }
 }

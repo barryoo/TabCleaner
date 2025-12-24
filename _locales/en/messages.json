@@ -41,6 +41,12 @@
   "dontDiscardIn1Week": {
     "message": "1 Week"
   },
+  "protectPermanent": {
+    "message": "Permanent"
+  },
+  "removeProtection": {
+    "message": "Remove"
+  },
   "resetProtection": {
     "message": "Reset Protection"
   },
@@ -48,7 +54,10 @@
     "message": "Protect tabs from auto-discard using temporary protection or permanent whitelist rules."
   },
   "permanentProtection": {
-    "message": "Permanent Protection (Whitelist)"
+    "message": "URL Rule Protection"
+  },
+  "chooseUrlScope": {
+    "message": "Choose URL scope (and duration):"
   },
   "wildcardSupport": {
     "message": "Supports wildcards in URL patterns:"
@@ -78,7 +87,10 @@
     "message": "Idle Time Limit"
   },
   "idleTimeLimitDesc": {
-    "message": "Tabs inactive longer than this will be auto-discarded"
+    "message": "Tabs idle longer than this will be discarded"
+  },
+  "secondsUnit": {
+    "message": "seconds"
   },
   "defaultTime": {
     "message": "Default: 1800 seconds (30 minutes)"
@@ -160,5 +172,28 @@
   },
   "totalTabs": {
     "message": "Total"
+  },
+  "protectionExtended": {
+    "message": "Protection extended by $hours$ hours",
+    "placeholders": {
+      "hours": {
+        "content": "$1"
+      }
+    }
+  },
+  "protectionCanceled": {
+    "message": "Temporary protection canceled"
+  },
+  "pleaseSelectPattern": {
+    "message": "Please select a URL pattern"
+  },
+  "permanentProtectedTip": {
+    "message": "Already in permanent whitelist"
+  },
+  "temporaryProtectionExpiresAt": {
+    "message": "Expires at:"
+  },
+  "cancelTemporaryProtection": {
+    "message": "Cancel temporary protection"
   }
 }

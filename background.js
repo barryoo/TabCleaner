@@ -1,5 +1,5 @@
 // 浏览器兼容性处理：Firefox 使用 browser，Chrome 使用 chrome
-const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
+const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 
 let idleTime = {};
 let lastActiveTabId = null; // 记录上一个激活的标签页ID
@@ -83,6 +83,8 @@ setInterval(async () => {
   //准备数据
   let idleLimit = (await getFromLocalStorage("idleLimit")) || IDLE_LIMIT;
   const whitelist = (await getFromLocalStorage("whitelist")) || [];
+  const tempProtectedUrls =
+    (await getFromLocalStorage("tempProtectedUrls")) || {};
   const activeTabs = await queryTabs({ active: true });
   console.log("==get all avtive tab");
   const activeTabIds = activeTabs.map((tab) => {
@@ -91,6 +93,7 @@ setInterval(async () => {
   });
 
   console.log("==whitelist", whitelist);
+  console.log("==tempProtectedUrls", tempProtectedUrls);
   const now = Date.now();
 
   let index = 0;
@@ -132,6 +135,27 @@ setInterval(async () => {
         continue;
       }
 
+      // 检查是否有临时保护规则
+      const tempProtection = tempProtectedUrls[tabId];
+      if (tempProtection) {
+        const { url: pattern, expiresAt } = tempProtection;
+        if (now < expiresAt && matchesUrlPattern(tabUrl, pattern)) {
+          console.log(
+            "临时保护中, 匹配规则:",
+            pattern,
+            "过期时间:",
+            new Date(expiresAt).toLocaleString()
+          );
+          continue;
+        } else if (now >= expiresAt) {
+          console.log("临时保护已过期, 清理数据");
+          delete tempProtectedUrls[tabId];
+          await browserAPI.storage.local.set({
+            tempProtectedUrls: tempProtectedUrls,
+          });
+        }
+      }
+
       // 如果当前标签在白名单中，跳过
       if (isWhitelisted(tabUrl, whitelist)) {
         console.log("whitelisted, skip");
@@ -159,10 +183,40 @@ setInterval(async () => {
 }, 10000); // 每10s检查一次
 
 function isWhitelisted(url, whitelist) {
-  return whitelist.some((pattern) => {
-    const regex = new RegExp("^" + pattern + ".*$");
-    return regex.test(url);
-  });
+  return whitelist.some((pattern) => matchesUrlPattern(url, pattern));
+}
+
+// 将标签页 URL 归一化为两种形式，方便匹配：
+// 1) full:  protocol://host/path   (去除查询参数和锚点)
+// 2) hostPath: host/path           (去除查询参数和锚点，不含 protocol)
+function normalizeUrlForMatching(rawUrl) {
+  try {
+    const urlObj = new URL(rawUrl);
+    const full = urlObj.protocol + "//" + urlObj.host + urlObj.pathname;
+    const hostPath = urlObj.host + urlObj.pathname;
+    return { full, hostPath };
+  } catch (e) {
+    return { full: rawUrl, hostPath: rawUrl };
+  }
+}
+
+function matchesUrlPattern(rawUrl, pattern) {
+  const normalized = normalizeUrlForMatching(rawUrl);
+  // 带 protocol 的规则匹配 full；否则按需求匹配 host/path 形式
+  if (pattern.includes("://")) {
+    return matchesPattern(normalized.full, pattern);
+  }
+  return matchesPattern(normalized.hostPath, pattern);
+}
+
+// 通配符匹配函数
+function matchesPattern(url, pattern) {
+  // 将通配符 * 转换为正则表达式的 .*
+  const escapedPattern = pattern
+    .replace(/[.+?^${}()|[\]\\]/g, "\\$&") // 转义特殊字符
+    .replace(/\*/g, ".*"); // 将 * 替换为 .*
+  const regex = new RegExp("^" + escapedPattern + "$");
+  return regex.test(url);
 }
 
 function getFromLocalStorage(key) {
